@@ -151,30 +151,18 @@ install_openasar() {
 }
 
 # launches discord
+
 launch_discord() {
     info "Launching Discord..."
-    
-    case "$OPENASAR_DIR" in
-        */discord/resources/app.asar)
-            DISCORD_BIN="/opt/discord/Discord"
-            ;;
-        */discord-ptb/resources/app.asar)
-            DISCORD_BIN="/opt/discord-ptb/Discord"
-            ;;
-        */discord-canary/resources/app.asar)
-            DISCORD_BIN="/opt/discord-canary/Discord"
-            ;;
-        *)
-            error "Could not determine Discord executable from app.asar path."
-            return 1
-            ;;
-    esac
+
+    DISCORD_BIN="$(dirname "$OPENASAR_DIR")/../Discord"
 
     if [ -f "$DISCORD_BIN" ]; then
         sudo -u "$SUDO_USER" env DISPLAY="$DISPLAY" XAUTHORITY="$XAUTHORITY" "$DISCORD_BIN" &>/dev/null &
         success "Discord has been launched."
     else
         error "Discord executable not found at $DISCORD_BIN."
+        return 1
     fi
 }
 
